@@ -18,30 +18,13 @@
             padding: 0;
             margin: 0;
         }
-	/* --- 追加ここから --- */
-	.legend {
-	    background: #fff;
-	    padding: 6px 8px;
-	    font: 12px/14px "Arial", sans-serif;
-	    border-radius: 4px;
-	    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-	    line-height: 18px;
-	}
-	.legend i {
-	    width: 14px;
-	    height: 14px;
-	    float: left;
-	    margin-right: 6px;
-	    opacity: 0.8;
-	}
-	/* --- 追加ここまで --- */
+	
         </style>
         <title></title>
     </head>
     <body>
         <div id="map">
         </div>
-	<div id="legend" class="legend leaflet-control"></div>
         <script src="js/qgis2web_expressions.js"></script>
         <script src="js/leaflet.js"></script>
         <script src="js/L.Control.Layers.Tree.min.js"></script>
@@ -652,56 +635,7 @@
         map.on("layerremove", function(){
             resetLabels([layer__3,layer__4]);
         });
-	/*  === ★ 追加ここから ★ ===  */
 	
-	/* -------------------------------
-	   3-1．レイヤー切替（Layer Control）
-	----------------------------------*/
-	// ベースマップ（必要に応じて名称を変更）
-	var baseMaps = {
-	    'GSI English': layer_2_0,
-	    'GSI English 9-10': layer__1,
-	    'OpenStreetMap': layer_OpenStreetMap_2
-	};
-	
-	// オーバーレイ（チェックで ON/OFF）
-	var overlayMaps = {
-	    'レイヤ3': layer__3,
-	    'レイヤ4': layer__4,
-	    'レイヤ5': layer__5
-	};
-	
-	// 折りたたみ式の場合：{collapsed:true}
-	L.control.layers(baseMaps, overlayMaps, {collapsed:false}).addTo(map);
-	
-	/* -------------------------------
-	   3-2．凡例（Legend）
-	----------------------------------*/
-	// 例：layer__5 の属性 'P29_003' ごとの色を示す
-	var legend = L.control({position: 'bottomright'});
-	
-	legend.onAdd = function (map) {
-	    var div = L.DomUtil.get('legend');   // 先ほどの div を取得
-	    div.innerHTML = '';                  // 念のためリセット
-	
-	    // 凡例アイテムを手書きする例
-	    var grades = [
-	        {label: '16001', color: 'rgba(53,167,228,1.0)'},
-	        {label: '16002', color: 'rgba(44,224,206,1.0)'},
-	        {label: '16003', color: 'rgba(220,144,133,1.0)'}
-	        // …必要分だけ追加
-	    ];
-	
-	    grades.forEach(function(g){
-	        div.innerHTML +=
-	            '<i style="background:' + g.color + '"></i>' +
-	            g.label + '<br>';
-	    });
-	    return div;
-	};
-	legend.addTo(map);
-	
-	/*  === ★ 追加ここまで ★ ===  */
 
         </script>
     </body>
