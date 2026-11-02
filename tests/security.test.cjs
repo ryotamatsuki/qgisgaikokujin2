@@ -41,3 +41,8 @@ test('feature properties use safe DOM-generated text instead of Autolinker HTML'
   assert.match(html, /container\.appendChild\(document\.createTextNode\(raw\.slice\(cursor\)\)\)/);
   // Browser smoke tests separately check this HTML page as actually parsed by Chromium.
 });
+
+test('no identity quote replacements mask a missing escaping step', () => {
+  const html = require('node:fs').readFileSync(require('node:path').join(__dirname,'..','index.html'),'utf8');
+  assert.equal((html.match(/\.replace\(\/'\/g,/g)||[]).length,0);
+});
