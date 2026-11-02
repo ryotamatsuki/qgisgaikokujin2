@@ -21,7 +21,7 @@ jobs:
       - uses: github/codeql-action/analyze@v4
         with:
           category: /language:javascript-typescript
-      - name: Reject high and critical CodeQL results in this commit
+      - name: Require zero CodeQL security findings in this commit
         shell: bash
         run: |
           node --input-type=module <<'NODE'
@@ -39,10 +39,10 @@ jobs:
               const rule=allRules.find(r=>r.id===finding.ruleId)||components[0]?.rules?.[finding.ruleIndex];
               if (!rule) throw Error('Missing SARIF rule metadata: '+finding.ruleId);
               const sev=Number(rule.properties?.['security-severity']??0);
-              if (sev>=7) high.push({rule:finding.ruleId,score:sev,file:finding.locations?.[0]?.physicalLocation?.artifactLocation?.uri});
+              if (sev>0) high.push({rule:finding.ruleId,score:sev,file:finding.locations?.[0]?.physicalLocation?.artifactLocation?.uri});
             }
           }
-          console.log(JSON.stringify({totalFindings:total,highCritical:high.length,findings:high.slice(0,30)},null,2));
+          console.log(JSON.stringify({totalFindings:total,securityFindings:high.length,findings:high.slice(0,30)},null,2));
           if (high.length) process.exitCode=1;
           NODE
 
