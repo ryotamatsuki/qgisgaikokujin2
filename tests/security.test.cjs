@@ -31,3 +31,14 @@ test('remaining HTML assignment only clears the results container', () => {
   assert.equal(assignments.length, 1);
   assert.ok(code.includes("this.resultsContainer.innerHTML = '';"));
 });
+
+test('feature properties use safe DOM-generated text instead of Autolinker HTML', () => {
+  const html = require('node:fs').readFileSync(require('node:path').join(__dirname, '..', 'index.html'), 'utf8');
+  assert.equal((html.match(/renderSafePropertyValue\(/g) || []).length, 24);
+  assert.doesNotMatch(html, /autolinker\.link\(/);
+  assert.doesNotMatch(html, /<script src="js\/Autolinker\.min\.js"/);
+  assert.match(html, /link\.textContent = match\[0\];/);
+  assert.match(html, /container\.appendChild\(document\.createTextNode\(raw\.slice\(cursor\)\)\)/);
+  const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].map(x => x[1]).filter(Boolean);
+  for (const source of scripts) assert.doesNotThrow(() => new Function(source));
+});
