@@ -41,7 +41,7 @@ L.PhotonBase = L.Class.extend({
     featureToPopupContent: function (feature) {
         var container = L.DomUtil.create('div', 'leaflet-photon-popup'),
             title = L.DomUtil.create('h3', '', container);
-        title.innerHTML = feature.properties.label;
+        title.textContent = feature.properties.label ?? '';
         return container;
     }
 
@@ -248,13 +248,13 @@ L.PhotonBaseSearch = L.PhotonBase.extend({
             details = [],
             type = this.formatType(feature);
             if (feature.properties.display_name) {
-                title.innerHTML = feature.properties.display_name;
+                title.textContent = feature.properties.display_name;
             } else if (feature.properties.name) {
-            title.innerHTML = feature.properties.name;
+            title.textContent = feature.properties.name;
         } else if (feature.properties.housenumber) {
-            title.innerHTML = feature.properties.housenumber;
+            title.textContent = feature.properties.housenumber;
             if (feature.properties.street) {
-                title.innerHTML += ' ' + feature.properties.street;
+                title.textContent += ' ' + feature.properties.street;
             }
         }
         if (type) details.push(type);
@@ -262,7 +262,7 @@ L.PhotonBaseSearch = L.PhotonBase.extend({
             details.push(feature.properties.city);
         }
         if (feature.properties.country) details.push(feature.properties.country);
-        detailsContainer.innerHTML = details.join(', ');
+        detailsContainer.textContent = details.join(', ');
     },
 
     formatResult: function (feature, el) {
@@ -318,12 +318,12 @@ L.PhotonBaseSearch = L.PhotonBase.extend({
         });
         if (geojson.features.length === 0) {
             var noresult = L.DomUtil.create('li', 'photon-no-result', this.resultsContainer);
-            noresult.innerHTML = this.options.noResultLabel;
+            noresult.textContent = this.options.noResultLabel;
         }
         if (this.options.feedbackEmail) {
             var feedback = L.DomUtil.create('a', 'photon-feedback', this.resultsContainer);
             feedback.href = 'mailto:' + this.options.feedbackEmail;
-            feedback.innerHTML = this.options.feedbackLabel;
+            feedback.textContent = this.options.feedbackLabel;
         }
         this.CURRENT = 0;
         this.highlight();
